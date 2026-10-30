@@ -1,0 +1,6 @@
+{
+  "name": "Al Falah Somobay Somiti",
+  "description": "Official website and member financial portal for Al Falah Somobay Somiti (আল-ফালাহ সমবায় সমিতি), featuring automatic fund calculations and secure management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
