@@ -68,6 +68,7 @@ export interface ContactContent {
 
 export interface AdminUser {
   id: string;
+  username: string; // e.g. "@rago"
   email: string;
   role: 'super_admin' | 'admin' | 'auditor';
   full_name: string;
@@ -78,6 +79,7 @@ export interface AuditLog {
   id: string;
   admin_id: string;
   admin_email: string;
+  admin_name?: string;
   action: 'CREATE' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'RECALCULATE';
   affected_table: 'members' | 'payments' | 'policies' | 'contact_content' | 'auth';
   affected_record_id?: string;

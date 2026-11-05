@@ -1,12 +1,12 @@
 import React from 'react';
-import { Shield, Lock } from 'lucide-react';
+import { Shield, Clock, MapPin } from 'lucide-react';
 import emblemImg from '../../assets/images/society_emblem_1793374522881.jpg';
 
 interface FooterProps {
   onOpenAdmin: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = () => {
   return (
     <footer className="bg-[#073D32] text-white border-t border-[#075B46]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -38,55 +38,53 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             </div>
           </div>
 
-          {/* Col 2: Navigation Links */}
+          {/* Col 2: Navigation Links (Pure English labels only) */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold font-english uppercase tracking-wider text-[#D6B66C]">
               Quick Navigation
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-[#E2E8E0] font-bengali">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#E2E8E0] font-english font-medium">
               <li>
                 <a href="#home" className="hover:text-[#D6B66C] transition-colors">
-                  মূলপাতা (Home)
+                  HOME
                 </a>
               </li>
               <li>
                 <a href="#about" className="hover:text-[#D6B66C] transition-colors">
-                  সমিতি পরিচিতি (About)
+                  ABOUT
                 </a>
               </li>
               <li>
                 <a href="#members" className="hover:text-[#D6B66C] transition-colors">
-                  সদস্য খতিয়ান ও তহবিল (Members & Fund)
+                  MEMBERS
                 </a>
               </li>
               <li>
                 <a href="#policy" className="hover:text-[#D6B66C] transition-colors">
-                  গঠনতন্ত্র ও নীতিমালা (Policy)
+                  POLICY
                 </a>
               </li>
               <li>
                 <a href="#contact" className="hover:text-[#D6B66C] transition-colors">
-                  যোগাযোগ (Contact)
+                  CONTACT
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Portal Admin Access */}
-          <div className="space-y-3">
+          {/* Col 3: Office Hours & Location Note (No public admin buttons visible) */}
+          <div className="space-y-3 font-bengali">
             <h4 className="text-xs font-bold font-english uppercase tracking-wider text-[#D6B66C]">
-              System Administration
+              কার্যালয় ও সময়সূচি
             </h4>
-            <p className="text-xs text-[#E2E8E0]/70 font-bengali leading-relaxed">
-              অনুমোদিত কার্যনির্বাহী সদস্য ও অডিটরদের জন্য সংরক্ষিত প্রশাসনিক পোর্টাল।
-            </p>
-            <button
-              onClick={onOpenAdmin}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#075B46] hover:bg-[#097358] text-[#F8FAF7] border border-[#D6B66C]/30 text-xs font-semibold transition-colors"
-            >
-              <Lock className="w-3.5 h-3.5 text-[#D6B66C]" />
-              <span>প্রশাসনিক প্রবেশদ্বার (/admin)</span>
-            </button>
+            <div className="flex items-start gap-2 text-xs text-[#E2E8E0]/80">
+              <Clock className="w-4 h-4 text-[#D6B66C] shrink-0 mt-0.5" />
+              <span>শনিবার - বৃহস্পতিবার: সকাল ৯:০০ - বিকাল ৫:০০ (শুক্রবার বন্ধ)</span>
+            </div>
+            <div className="flex items-start gap-2 text-xs text-[#E2E8E0]/80">
+              <MapPin className="w-4 h-4 text-[#D6B66C] shrink-0 mt-0.5" />
+              <span>উত্তরা, ঢাকা-১২৩০, বাংলাদেশ</span>
+            </div>
           </div>
         </div>
 

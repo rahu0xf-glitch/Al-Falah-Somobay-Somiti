@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Menu, X, ShieldCheck } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import emblemImg from '../../assets/images/society_emblem_1793374522881.jpg';
 
 interface NavbarProps {
@@ -19,12 +19,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Pure English navigation labels without Bangla sub-text
   const navLinks = [
-    { label: 'HOME', bnLabel: 'মূলপাতা', href: '#home' },
-    { label: 'ABOUT', bnLabel: 'পরিচিতি', href: '#about' },
-    { label: 'MEMBERS', bnLabel: 'সদস্য ও তহবিল', href: '#members' },
-    { label: 'POLICY', bnLabel: 'নীতিমালা', href: '#policy' },
-    { label: 'CONTACT', bnLabel: 'যোগাযোগ', href: '#contact' },
+    { label: 'HOME', href: '#home' },
+    { label: 'ABOUT', href: '#about' },
+    { label: 'MEMBERS', href: '#members' },
+    { label: 'POLICY', href: '#policy' },
+    { label: 'CONTACT', href: '#contact' },
   ];
 
   return (
@@ -37,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-8 h-20">
-          {/* Zone 1: Brand wordmark (single text element / link) */}
+          {/* Zone 1: Brand wordmark */}
           <a
             href="#home"
             className="flex items-center gap-3 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D6B66C] rounded-lg p-1 transition-opacity hover:opacity-90 shrink-0"
@@ -58,46 +59,34 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
             </div>
           </a>
 
-          {/* Zone 2: 4-5 concise single-line nav links */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
+          {/* Zone 2: Pure English nav links (HOME | ABOUT | MEMBERS | POLICY | CONTACT) */}
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-[#E2E8E0] hover:text-[#D6B66C] transition-colors whitespace-nowrap shrink-0 py-1 border-b border-transparent hover:border-[#D6B66C]"
+                className="text-[#E2E8E0] hover:text-[#D6B66C] font-english tracking-wider font-semibold transition-colors whitespace-nowrap shrink-0 py-1 border-b border-transparent hover:border-[#D6B66C]"
               >
-                <span className="font-english tracking-wide">{link.label}</span>
-                <span className="text-xs opacity-75 font-bengali ml-1.5">({link.bnLabel})</span>
+                {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Zone 3: 1 primary action */}
+          {/* Zone 3: Public admin button is hidden for security as requested;
+              only shows if already logged in so admin can quickly jump back to panel */}
           <div className="hidden sm:flex items-center gap-3 shrink-0">
-            <button
-              onClick={onOpenAdmin}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-all shadow-sm whitespace-nowrap shrink-0 ${
-                isAdminLoggedIn
-                  ? 'bg-[#D6B66C] text-[#073D32] hover:bg-[#e5c985]'
-                  : 'bg-[#075B46] text-[#F8FAF7] border border-[#D6B66C]/40 hover:bg-[#097358]'
-              }`}
-            >
-              {isAdminLoggedIn ? (
-                <>
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#073D32]" />
-                  <span>অ্যাডমিন ড্যাশবোর্ড</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-3.5 h-3.5 text-[#D6B66C]" />
-                  <span>অ্যাডমিন লগইন</span>
-                </>
-              )}
-            </button>
+            {isAdminLoggedIn && (
+              <button
+                onClick={onOpenAdmin}
+                className="flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-[#D6B66C] text-[#073D32] hover:bg-[#e5c985] transition-all shadow-sm whitespace-nowrap shrink-0"
+              >
+                <span>Admin Dashboard</span>
+              </button>
+            )}
           </div>
 
           {/* Mobile hamburger toggle */}
-          <div className="flex sm:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-white hover:bg-[#075B46] transition-colors"
@@ -111,29 +100,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="sm:hidden bg-[#073D32] border-b border-[#075B46] px-4 pt-2 pb-6 space-y-3">
+        <div className="lg:hidden bg-[#073D32] border-b border-[#075B46] px-4 pt-2 pb-6 space-y-3">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-[#E2E8E0] hover:text-[#D6B66C] hover:bg-[#075B46]/60 rounded-md transition-colors"
+              className="block px-3 py-2 text-sm font-semibold tracking-wider font-english text-[#E2E8E0] hover:text-[#D6B66C] hover:bg-[#075B46]/60 rounded-md transition-colors"
             >
-              {link.bnLabel} · <span className="text-xs uppercase">{link.label}</span>
+              {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-[#075B46]">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenAdmin();
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-[#D6B66C] text-[#073D32]"
-            >
-              <Lock className="w-4 h-4" />
-              <span>{isAdminLoggedIn ? 'অ্যাডমিন ড্যাশবোর্ড' : 'অ্যাডমিন প্রবেশদ্বার'}</span>
-            </button>
-          </div>
+          {isAdminLoggedIn && (
+            <div className="pt-2 border-t border-[#075B46]">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-[#D6B66C] text-[#073D32]"
+              >
+                <span>Admin Dashboard</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>

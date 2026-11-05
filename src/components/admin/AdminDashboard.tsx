@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Users, Landmark, CreditCard, BookOpen, Clock, ShieldCheck, 
-  ArrowUpRight, Plus, Activity 
+  ArrowUpRight, Plus, Activity, UserCheck 
 } from 'lucide-react';
 import { SocietyStats, AuditLog } from '../../types';
 import { formatBDT, toBengaliNumber, formatDate } from '../../utils/bengali';
@@ -9,7 +9,7 @@ import { formatBDT, toBengaliNumber, formatDate } from '../../utils/bengali';
 interface AdminDashboardProps {
   stats: SocietyStats;
   recentLogs: AuditLog[];
-  onNavigateTab: (tabId: 'members' | 'payments' | 'policy' | 'contact' | 'logs') => void;
+  onNavigateTab: (tabId: 'members' | 'payments' | 'policy' | 'contact' | 'users' | 'logs') => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -29,7 +29,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             আল-ফালাহ সমবায় সমিতি প্রশাসন
           </h2>
           <p className="text-xs sm:text-sm text-[#E2E8E0]/80 font-bengali mt-1 max-w-xl">
-            সকল সদস্যের সঞ্চয় খতিয়ান, মাসিক কিস্তি সংরক্ষণ, গঠনতান্ত্রিক নীতিমালা ও যোগাযোগ তথ্যের কেন্দ্রীয় ব্যবস্থাপনা
+            সকল সদস্যের সঞ্চয় খতিয়ান, মাসিক কিস্তি সংরক্ষণ, গঠনতান্ত্রিক নীতিমালা, যোগাযোগ তথ্য ও একাধিক অ্যাডমিন ইউজারের কেন্দ্রীয় ব্যবস্থাপনা
           </p>
         </div>
 
@@ -127,85 +127,101 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       </div>
 
-      {/* 4 Core Management Shortcuts */}
+      {/* Core Management Shortcuts */}
       <div>
         <h3 className="text-base font-bold text-gray-900 font-bengali mb-4">
           প্রশাসনিক ব্যবস্থাপনা মডিউলসমূহ (Quick Access)
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <button
             onClick={() => onNavigateTab('members')}
-            className="p-5 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
+            className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
           >
-            <div className="w-10 h-10 rounded-lg bg-[#075B46]/10 text-[#075B46] flex items-center justify-center mb-3 group-hover:bg-[#075B46] group-hover:text-white transition-colors">
-              <Users className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-[#075B46]/10 text-[#075B46] flex items-center justify-center mb-2.5 group-hover:bg-[#075B46] group-hover:text-white transition-colors">
+              <Users className="w-4 h-4" />
             </div>
             <h4 className="text-sm font-bold text-gray-900 font-bengali flex items-center justify-between">
               <span>সদস্য ব্যবস্থাপনা</span>
-              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-[#075B46]" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#075B46]" />
             </h4>
-            <p className="text-xs text-gray-500 font-bengali mt-1">
-              সদস্য যোগ, সম্পাদনা, এনআইডি ও নমিনি তথ্য
+            <p className="text-[11px] text-gray-500 font-bengali mt-0.5">
+              সদস্য যোগ, সম্পাদনা ও এনআইডি
             </p>
           </button>
 
           <button
             onClick={() => onNavigateTab('payments')}
-            className="p-5 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
+            className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
           >
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
-              <CreditCard className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-2.5 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
+              <CreditCard className="w-4 h-4" />
             </div>
             <h4 className="text-sm font-bold text-gray-900 font-bengali flex items-center justify-between">
               <span>মাসিক কিস্তি জমা</span>
-              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-emerald-700" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-emerald-700" />
             </h4>
-            <p className="text-xs text-gray-500 font-bengali mt-1">
-              সঞ্চয় এন্ট্রি, সংশোধন ও স্বয়ংক্রিয় তহবিল হিসাব
+            <p className="text-[11px] text-gray-500 font-bengali mt-0.5">
+              সঞ্চয় এন্ট্রি ও স্বয়ংক্রিয় তহবিল হিসাব
             </p>
           </button>
 
           <button
             onClick={() => onNavigateTab('policy')}
-            className="p-5 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
+            className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
           >
-            <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-700 group-hover:text-white transition-colors">
-              <BookOpen className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-2.5 group-hover:bg-blue-700 group-hover:text-white transition-colors">
+              <BookOpen className="w-4 h-4" />
             </div>
             <h4 className="text-sm font-bold text-gray-900 font-bengali flex items-center justify-between">
               <span>গঠনতন্ত্র ও নীতিমালা</span>
-              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-blue-700" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-blue-700" />
             </h4>
-            <p className="text-xs text-gray-500 font-bengali mt-1">
-              নিয়মাবলী সংযোজন ও তাৎক্ষণিক ওয়েব প্রকাশ
+            <p className="text-[11px] text-gray-500 font-bengali mt-0.5">
+              নিয়মাবলী পরিবর্তন ও ওয়েব প্রকাশ
             </p>
           </button>
 
           <button
             onClick={() => onNavigateTab('contact')}
-            className="p-5 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
+            className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
           >
-            <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center mb-3 group-hover:bg-amber-700 group-hover:text-white transition-colors">
-              <Clock className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center mb-2.5 group-hover:bg-amber-700 group-hover:text-white transition-colors">
+              <Clock className="w-4 h-4" />
             </div>
             <h4 className="text-sm font-bold text-gray-900 font-bengali flex items-center justify-between">
-              <span>যোগাযোগ তথ্য সম্পাদক</span>
-              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-amber-700" />
+              <span>যোগাযোগ সম্পাদক</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-amber-700" />
             </h4>
-            <p className="text-xs text-gray-500 font-bengali mt-1">
-              অফিস ঠিকানা, ফোন ও সময়সূচি পরিবর্তন
+            <p className="text-[11px] text-gray-500 font-bengali mt-0.5">
+              অফিস ঠিকানা ও হটলাইন পরিবর্তন
+            </p>
+          </button>
+
+          <button
+            onClick={() => onNavigateTab('users')}
+            className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#075B46] text-left transition-all hover:shadow-sm group"
+          >
+            <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center mb-2.5 group-hover:bg-purple-700 group-hover:text-white transition-colors">
+              <UserCheck className="w-4 h-4" />
+            </div>
+            <h4 className="text-sm font-bold text-gray-900 font-bengali flex items-center justify-between">
+              <span>অ্যাডমিন ইউজার</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-purple-700" />
+            </h4>
+            <p className="text-[11px] text-gray-500 font-bengali mt-0.5">
+              নতুন অ্যাডমিন তৈরি ও রোল নিয়ন্ত্রণ
             </p>
           </button>
         </div>
       </div>
 
-      {/* Recent Audit Logs Strip */}
+      {/* Recent Audit Logs Strip with clear admin attribution */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <Activity className="w-5 h-5 text-[#075B46]" />
             <h3 className="text-base font-bold text-gray-900 font-bengali">
-              সাম্প্রতিক প্রশাসনিক কার্যক্রম (Latest Audit Activities)
+              সাম্প্রতিক পরিবর্তন ও কে আপডেট করলো (Admin Activity & Attribution)
             </h3>
           </div>
           <button
@@ -217,16 +233,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         <div className="divide-y divide-gray-100 text-xs">
-          {recentLogs.slice(0, 5).map((log) => (
-            <div key={log.id} className="py-2.5 flex items-center justify-between gap-4 font-bengali">
-              <div>
-                <span className="font-semibold text-gray-800">{log.summary}</span>
-                <span className="text-gray-400 text-[11px] font-english ml-2">
-                  by {log.admin_email}
-                </span>
+          {recentLogs.slice(0, 6).map((log) => (
+            <div key={log.id} className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 font-bengali">
+              <div className="space-y-0.5">
+                <div className="font-semibold text-gray-800 text-sm">
+                  {log.summary}
+                </div>
+                <div className="text-xs text-gray-500 flex items-center gap-2 font-english">
+                  <span className="font-bold text-[#075B46] bg-[#075B46]/10 px-2 py-0.5 rounded">
+                    by {log.admin_email}
+                  </span>
+                  <span>·</span>
+                  <span className="text-gray-400">
+                    {new Date(log.created_at).toLocaleString()}
+                  </span>
+                </div>
               </div>
-              <span className="text-[11px] text-gray-400 font-english whitespace-nowrap">
-                {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+
+              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-600 font-english self-start sm:self-auto">
+                {log.action} · {log.affected_table}
               </span>
             </div>
           ))}

@@ -85,20 +85,28 @@ export default function App() {
       setSession(curSession);
     }
 
-    // Check if initial URL is /admin or #admin
-    if (window.location.pathname === '/admin' || window.location.hash === '#admin') {
-      if (curSession) {
-        setCurrentView('admin');
-      } else {
-        setIsLoginModalOpen(true);
+    const checkAdminRoute = () => {
+      const path = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      if (path === '/admin' || path.endsWith('/admin') || hash === '#admin') {
+        const s = authService.getCurrentSession();
+        if (s) {
+          setCurrentView('admin');
+          setIsLoginModalOpen(false);
+        } else {
+          setIsLoginModalOpen(true);
+        }
       }
-    }
+    };
 
+    checkAdminRoute();
     loadDatabaseState();
 
-    // Handle browser popstate
+    // Listen for url / hash changes
     const handlePopState = () => {
-      if (window.location.pathname === '/admin' || window.location.hash === '#admin') {
+      const path = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      if (path === '/admin' || path.endsWith('/admin') || hash === '#admin') {
         const s = authService.getCurrentSession();
         if (s) {
           setCurrentView('admin');
@@ -107,11 +115,16 @@ export default function App() {
         }
       } else {
         setCurrentView('public');
+        setIsLoginModalOpen(false);
       }
     };
 
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, [loadDatabaseState]);
 
   const handleOpenAdmin = () => {
@@ -120,6 +133,7 @@ export default function App() {
       window.history.pushState(null, '', '/admin');
     } else {
       setIsLoginModalOpen(true);
+      window.history.pushState(null, '', '/admin');
     }
   };
 
@@ -127,6 +141,7 @@ export default function App() {
     setSession(newSession);
     setCurrentView('admin');
     window.history.pushState(null, '', '/admin');
+    loadDatabaseState();
   };
 
   const handleLogout = () => {
@@ -141,6 +156,13 @@ export default function App() {
     setCurrentView('public');
     window.history.pushState(null, '', '/');
     loadDatabaseState();
+  };
+
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+    if (currentView !== 'admin') {
+      window.history.pushState(null, '', '/');
+    }
   };
 
   if (!dataLoaded) {
@@ -175,7 +197,7 @@ export default function App() {
   // Render Public View
   return (
     <div className="min-h-screen bg-[#F8FAF7] text-[#202923] flex flex-col">
-      {/* Public Top Navbar */}
+      {/* Public Top Navbar (Admin login button hidden for visitors) */}
       <Navbar
         onOpenAdmin={handleOpenAdmin}
         isAdminLoggedIn={!!session}
@@ -203,13 +225,13 @@ export default function App() {
         <ContactSection contact={contact} />
       </main>
 
-      {/* Public Footer */}
+      {/* Public Footer (Admin button hidden) */}
       <Footer onOpenAdmin={handleOpenAdmin} />
 
-      {/* Admin Login Modal */}
+      {/* Admin Login Modal (Triggered securely via /admin or #admin) */}
       <AdminLoginModal
         isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
+        onClose={handleCloseLoginModal}
         onLoginSuccess={handleLoginSuccess}
       />
     </div>
