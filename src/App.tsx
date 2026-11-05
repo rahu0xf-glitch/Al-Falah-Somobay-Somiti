@@ -43,6 +43,22 @@ export default function App() {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // Helper to check if current URL or hash targets admin
+  const isUrlTargetingAdmin = (): boolean => {
+    if (typeof window === 'undefined') return false;
+    const path = window.location.pathname.toLowerCase().replace(/\/+$/, ''); // strips trailing slash
+    const hash = window.location.hash.toLowerCase();
+    const search = window.location.search.toLowerCase();
+    return (
+      path === '/admin' ||
+      path.startsWith('/admin') ||
+      path.includes('/admin') ||
+      hash === '#admin' ||
+      hash.includes('admin') ||
+      search.includes('admin')
+    );
+  };
+
   // Fetch all state from dbService
   const loadDatabaseState = useCallback(async () => {
     try {
@@ -78,38 +94,31 @@ export default function App() {
     }
   }, []);
 
-  // Initialize session & load database
+  // Initialize session & check route
   useEffect(() => {
     const curSession = authService.getCurrentSession();
     if (curSession) {
       setSession(curSession);
     }
 
-    const checkAdminRoute = () => {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      if (path === '/admin' || path.endsWith('/admin') || hash === '#admin') {
+    if (isUrlTargetingAdmin()) {
+      if (curSession) {
+        setCurrentView('admin');
+        setIsLoginModalOpen(false);
+      } else {
+        setIsLoginModalOpen(true);
+      }
+    }
+
+    loadDatabaseState();
+
+    // Listen for url / hash changes
+    const handleUrlChange = () => {
+      if (isUrlTargetingAdmin()) {
         const s = authService.getCurrentSession();
         if (s) {
           setCurrentView('admin');
           setIsLoginModalOpen(false);
-        } else {
-          setIsLoginModalOpen(true);
-        }
-      }
-    };
-
-    checkAdminRoute();
-    loadDatabaseState();
-
-    // Listen for url / hash changes
-    const handlePopState = () => {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      if (path === '/admin' || path.endsWith('/admin') || hash === '#admin') {
-        const s = authService.getCurrentSession();
-        if (s) {
-          setCurrentView('admin');
         } else {
           setIsLoginModalOpen(true);
         }
@@ -119,11 +128,27 @@ export default function App() {
       }
     };
 
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener('hashchange', handlePopState);
+    // Secret shortcut listener (Ctrl+Shift+A or Cmd+Shift+A)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        const s = authService.getCurrentSession();
+        if (s) {
+          setCurrentView('admin');
+        } else {
+          setIsLoginModalOpen(true);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('hashchange', handlePopState);
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [loadDatabaseState]);
 
@@ -197,7 +222,7 @@ export default function App() {
   // Render Public View
   return (
     <div className="min-h-screen bg-[#F8FAF7] text-[#202923] flex flex-col">
-      {/* Public Top Navbar (Admin login button hidden for visitors) */}
+      {/* Public Top Navbar */}
       <Navbar
         onOpenAdmin={handleOpenAdmin}
         isAdminLoggedIn={!!session}
@@ -225,10 +250,10 @@ export default function App() {
         <ContactSection contact={contact} />
       </main>
 
-      {/* Public Footer (Admin button hidden) */}
+      {/* Public Footer */}
       <Footer onOpenAdmin={handleOpenAdmin} />
 
-      {/* Admin Login Modal (Triggered securely via /admin or #admin) */}
+      {/* Admin Login Modal (Triggered securely via /admin, #admin, or secret shortcut) */}
       <AdminLoginModal
         isOpen={isLoginModalOpen}
         onClose={handleCloseLoginModal}

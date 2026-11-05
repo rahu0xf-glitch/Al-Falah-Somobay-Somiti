@@ -28,6 +28,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
     { label: 'CONTACT', href: '#contact' },
   ];
 
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleLogoSecretClick = (e: React.MouseEvent) => {
+    const newCount = clickCount + 1;
+    if (newCount >= 3) {
+      setClickCount(0);
+      onOpenAdmin();
+    } else {
+      setClickCount(newCount);
+      setTimeout(() => setClickCount(0), 1500);
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -39,25 +52,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmin, isAdminLoggedIn }) 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-8 h-20">
           {/* Zone 1: Brand wordmark */}
-          <a
-            href="#home"
-            className="flex items-center gap-3 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D6B66C] rounded-lg p-1 transition-opacity hover:opacity-90 shrink-0"
-          >
-            <img
-              src={emblemImg}
-              alt="আল-ফালাহ সমবায় সমিতি মনোগ্রাম"
-              className="w-10 h-10 rounded-full border border-[#D6B66C] object-cover shrink-0 shadow"
-              referrerPolicy="no-referrer"
-            />
-            <div className="flex flex-col">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleLogoSecretClick}
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D6B66C] rounded-full shrink-0 cursor-pointer"
+              title="আল-ফালাহ সমবায় সমিতি"
+            >
+              <img
+                src={emblemImg}
+                alt="আল-ফালাহ সমবায় সমিতি মনোগ্রাম"
+                className="w-10 h-10 rounded-full border border-[#D6B66C] object-cover shadow"
+                referrerPolicy="no-referrer"
+              />
+            </button>
+            <a
+              href="#home"
+              className="flex flex-col text-white focus:outline-none hover:opacity-90"
+            >
               <span className="font-bengali text-lg sm:text-xl font-bold tracking-tight text-white whitespace-nowrap">
                 আল-ফালাহ সমবায় সমিতি
               </span>
               <span className="text-[10px] tracking-wider uppercase text-[#D6B66C] font-english font-medium whitespace-nowrap">
                 Al Falah Somobay Somiti
               </span>
-            </div>
-          </a>
+            </a>
+          </div>
 
           {/* Zone 2: Pure English nav links (HOME | ABOUT | MEMBERS | POLICY | CONTACT) */}
           <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
